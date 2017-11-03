@@ -17,7 +17,7 @@ app.get("/api", (req, res) => {
 });
 
 wss.on("connection", ws => {
-  ws.send(createLog("Message 1"));
+  ws.send(createLog(process.env.base_url));
   ws.send(createLog("Message 2"));
   ws.send(createLog("Message 3"));
   ws.send(createLog("Message 4"));
