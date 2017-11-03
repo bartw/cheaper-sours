@@ -22,7 +22,8 @@ class Content extends React.Component {
 
   start = () => {
     this.setState(() => ({ started: true }));
-    const socket = new WebSocket("ws://" + document.location.host);
+    const protocol = document.location.protocol === "https:" ? "wss" : "ws";
+    const socket = new WebSocket(protocol + "://" + document.location.host);
     socket.onmessage = event => {
       const data = JSON.parse(event.data);
       if (data.type === "log") {

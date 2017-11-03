@@ -12,6 +12,14 @@ docker build -t hearse-corpus .
 docker run --rm -p 3000:3000 -e "base_url=https://google.com" hearse-corpus
 ```
 
+## Heroku
+
+```shell
+heroku container:login
+docker build -t hearse-corpus .
+heroku container:push web -a hearse-corpus
+```
+
 ## License
 
 Hearse-corpus is licensed under the [MIT License](LICENSE).
