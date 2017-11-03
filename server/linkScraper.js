@@ -1,3 +1,5 @@
+const scraper = require("./scraper.js");
+
 const getLinks = async page => {
   const houses = await page.$$("#list-canvas article.photo-card > a");
   return await Promise.all(
@@ -10,7 +12,8 @@ const getLink = async (page, selector) => {
   return await page.evaluate(el => el.href, element);
 };
 
-const scrapeLinks = async (page, url) => {
+const scrapeLinks = async url => {
+  const page = await scraper.initPage();
   await page.goto(url);
   console.log("goto");
   let links = [];
@@ -32,6 +35,7 @@ const scrapeLinks = async (page, url) => {
       hasNextPage = false;
     }
   } while (hasNextPage);
+  await scraper.dispose();
   console.log("scraped " + links.length + " links");
   return links;
 };

@@ -6,11 +6,11 @@ const append = (current, toAppend) => {
   return current + newLine + toAppend;
 };
 
-const download = (text, name) => {
+const download = (text, type, name) => {
   var a = document.createElement("a");
-  var file = new Blob([text], { type: "text/plain" });
+  var file = new Blob([text], { type: type });
   a.href = URL.createObjectURL(file);
-  a.download = "test.txt";
+  a.download = name;
   a.click();
 };
 
@@ -31,14 +31,18 @@ class Content extends React.Component {
           log: append(prevState.log, data.value)
         }));
       } else if (data.type === "file") {
-        download(data.value);
+        download(
+          data.value,
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "data.xlsx"
+        );
       }
     };
     socket.onclose = event => {
       this.setState(prevState => ({
-          log: append(prevState.log, "socket closed"),
-          running: false
-        }));
+        log: append(prevState.log, "socket closed"),
+        running: false
+      }));
       socket.close();
     };
   };
