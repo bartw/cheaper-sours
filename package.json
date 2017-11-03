@@ -1,0 +1,14 @@
+{
+  "name": "hearse-corpus",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/bartw/hearse-corpus",
+  "author": "Bart Wijnants <bartwijnants@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
