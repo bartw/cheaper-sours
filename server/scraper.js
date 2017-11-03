@@ -1,15 +1,16 @@
 const puppeteer = require("puppeteer");
-let browers;
+const logger = require("./logger");
+let browser;
 
 const initPage = async () => {
   browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
-  console.log("launched puppeteer");
+  logger.log("launched puppeteer");
   const page = await browser.newPage();
-  console.log("new page");
+  logger.log("new page");
   await page.setViewport({ width: 1920, height: 974 });
-  console.log("viewport");
+  logger.log("viewport");
   return page;
 };
 

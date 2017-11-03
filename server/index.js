@@ -3,14 +3,14 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 const foo = require("./foo");
+const logger = require("./logger");
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 const createLog = value => JSON.stringify({ type: "log", value: value });
-const createFile = data =>
-  JSON.stringify({ type: "file", value: data });
+const createFile = data => JSON.stringify({ type: "file", value: data });
 
 let running = false;
 
@@ -20,6 +20,9 @@ app.get("/api", (req, res) => {
 });
 
 wss.on("connection", async ws => {
+  const detachLogger = logger.attach({
+    log: message => ws.send(createLog(message))
+  });
   if (running) {
     ws.close();
   } else {
@@ -27,6 +30,7 @@ wss.on("connection", async ws => {
     const data = await foo.bar(process.env.base_url);
     ws.send(createFile(data));
     ws.close();
+    detachLogger();
     running = false;
   }
 });
