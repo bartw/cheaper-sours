@@ -17,11 +17,11 @@ const download = (text, name) => {
 class Content extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { started: false, log: "" };
+    this.state = { running: false, log: "" };
   }
 
   start = () => {
-    this.setState(() => ({ started: true }));
+    this.setState(() => ({ running: true, log: "" }));
     const protocol = document.location.protocol === "https:" ? "wss" : "ws";
     const socket = new WebSocket(protocol + "://" + document.location.host);
     socket.onmessage = event => {
@@ -31,20 +31,25 @@ class Content extends React.Component {
           log: append(prevState.log, data.value)
         }));
       } else if (data.type === "file") {
-        console.log(data.value);
         download(data.value);
       }
+    };
+    socket.onclose = event => {
+      this.setState(prevState => ({
+          log: append(prevState.log, "socket closed"),
+          running: false
+        }));
+      socket.close();
     };
   };
 
   render() {
     return (
       <div className="content">
-        {this.state.started ? (
-          <textarea value={this.state.log} />
-        ) : (
-          <button onClick={this.start}>Start</button>
-        )}
+        <div>
+          <textarea value={this.state.log} rows="10" cols="100" />
+        </div>
+        {!this.state.running && <button onClick={this.start}>Start</button>}
       </div>
     );
   }

@@ -11,17 +11,28 @@ const createLog = value => JSON.stringify({ type: "log", value: value });
 const createFile = () =>
   JSON.stringify({ type: "file", value: "this is the content" });
 
+let running = false;
+
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.get("/api", (req, res) => {
   res.send("api");
 });
 
 wss.on("connection", ws => {
-  ws.send(createLog(process.env.base_url));
-  ws.send(createLog("Message 2"));
-  ws.send(createLog("Message 3"));
-  ws.send(createLog("Message 4"));
-  ws.send(createFile());
+  if (running) {
+    ws.close();
+  } else {
+    running = true;
+    ws.send(createLog(process.env.base_url));
+    ws.send(createLog("Message 2"));
+    ws.send(createLog("Message 3"));
+    ws.send(createLog("Message 4"));
+    setTimeout(() => {
+      ws.send(createFile());
+      ws.close();
+      running = false;
+    }, 10000);
+  }
 });
 
 const port = process.env.PORT || 3000;
