@@ -7,17 +7,21 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+const createLog = value => JSON.stringify({ type: "log", value: value });
+const createFile = () =>
+  JSON.stringify({ type: "file", value: "this is the content" });
+
 app.use("/", express.static(path.join(__dirname, "../public")));
 app.get("/api", (req, res) => {
   res.send("api");
 });
 
 wss.on("connection", ws => {
-  ws.on("message", message => {
-    console.log("received: " + message);
-    ws.send(`Hello, you sent -> ${message}`);
-  });
-  ws.send("Hi there, I am a WebSocket server");
+  ws.send(createLog("Message 1"));
+  ws.send(createLog("Message 2"));
+  ws.send(createLog("Message 3"));
+  ws.send(createLog("Message 4"));
+  ws.send(createFile());
 });
 
 server.listen(3000, () => {
