@@ -9,7 +9,7 @@
 
 ```shell
 docker build -t hearse-corpus .
-docker run --rm -p 3000:3000 -e "base_url=https://google.com" hearse-corpus
+docker run --rm --shm-size=512m -p 3000:3000 -e "base_url=https://google.com" hearse-corpus
 ```
 
 ## Heroku
