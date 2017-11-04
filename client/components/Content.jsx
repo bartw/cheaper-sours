@@ -1,4 +1,5 @@
 import React from "react";
+import { findDOMNode } from "react-dom";
 import "./Content.css";
 
 const append = (current, toAppend) => {
@@ -18,6 +19,11 @@ class Content extends React.Component {
   constructor(props) {
     super(props);
     this.state = { running: false, log: "" };
+  }
+
+  componentDidUpdate() {
+    const textarea = findDOMNode(this.textarea);
+    textarea.scrollTop = textarea.scrollHeight;
   }
 
   start = () => {
@@ -51,7 +57,14 @@ class Content extends React.Component {
     return (
       <div className="content">
         <div>
-          <textarea value={this.state.log} rows="40" cols="150" />
+          <textarea
+            value={this.state.log}
+            rows="40"
+            cols="150"
+            ref={ta => {
+              this.textarea = ta;
+            }}
+          />
         </div>
         {!this.state.running && <button onClick={this.start}>Start</button>}
       </div>
