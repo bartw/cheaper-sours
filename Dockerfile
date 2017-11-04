@@ -16,16 +16,13 @@ WORKDIR /home/node/app
 
 COPY package.json .
 COPY yarn.lock .
-
-RUN yarn install
-
 COPY .babelrc .
 COPY webpack.config.js .
 COPY client ./client
 COPY server ./server
 COPY public ./public
 
-RUN yarn build
+RUN yarn install
 
 EXPOSE 3000
 
