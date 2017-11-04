@@ -51,7 +51,7 @@ class Content extends React.Component {
     return (
       <div className="content">
         <div>
-          <textarea value={this.state.log} rows="10" cols="100" />
+          <textarea value={this.state.log} rows="40" cols="150" />
         </div>
         {!this.state.running && <button onClick={this.start}>Start</button>}
       </div>
