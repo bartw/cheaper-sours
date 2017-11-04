@@ -25,6 +25,8 @@ COPY client ./client
 COPY server ./server
 COPY public ./public
 
+RUN yarn build
+
 EXPOSE 3000
 
 CMD ["yarn", "start"]
