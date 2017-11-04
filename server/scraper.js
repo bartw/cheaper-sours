@@ -10,7 +10,12 @@ const initPage = async () => {
   return page;
 };
 
-const dispose = async () => await browser.close();
+const dispose = async () => {
+  if (browser) {
+    await browser.close();
+    browser = null;
+  }
+};
 
 const scraper = {
   initPage: initPage,

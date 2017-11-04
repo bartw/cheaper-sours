@@ -16,13 +16,11 @@ const getUrl = async (page, selector) => {
   return null;
 };
 
-const scrapeLinks = async url => {
-  const page = await scraper.initPage();
+const scrapeLinks = async (page, url) => {
   await page.goto(url);
   logger.log("get links from " + url);
   const links = await getLinks(page);
   const nextPage = await getUrl(page, "a.hsr-pagination-next");
-  await scraper.dispose();
   return {
     links: links,
     nextPage: nextPage
@@ -33,8 +31,12 @@ const retryScrapeLinks = async url => {
   var maxRetries = 5;
   for (let retries = 0; retries < maxRetries; retries++) {
     try {
-      return await scrapeLinks(url);
+      const page = await scraper.initPage();
+      const result = await scrapeLinks(page, url);
+      await scraper.dispose();
+      return result;
     } catch (error) {
+      await scraper.dispose();
       logger.log(
         "attempt " + (retries + 1) + " to scrape links from " + url + " failed"
       );

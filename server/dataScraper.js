@@ -16,8 +16,7 @@ const getInnerHtml = async (page, selector) => {
   return await page.evaluate(el => el.innerHTML, element);
 };
 
-const scrapeData = async link => {
-  const page = await scraper.initPage();
+const scrapeData = async (page, link) => {
   await page.goto(link);
   logger.log("scrape from " + link);
 
@@ -56,7 +55,6 @@ const scrapeData = async link => {
     )
   });
   tuples.push({ name: "link", value: link });
-  await scraper.dispose();
 
   return tuples;
 };
@@ -65,8 +63,12 @@ const retryScrapeData = async link => {
   var maxRetries = 5;
   for (let retries = 0; retries < maxRetries; retries++) {
     try {
-      return await scrapeData(link);
+      const page = await scraper.initPage();
+      const result = await scrapeData(page, link);
+      await scraper.dispose();
+      return result;
     } catch (error) {
+      await scraper.dispose();
       logger.log(
         "attempt " + (retries + 1) + " to scrape data from " + link + " failed"
       );
