@@ -28,7 +28,9 @@ wss.on("connection", async ws => {
   } else {
     running = true;
     const data = await foo.bar(process.env.base_url);
-    ws.send(createFile(data));
+    if (data) {
+      ws.send(createFile(data));
+    }
     ws.close();
     detachLogger();
     running = false;

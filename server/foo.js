@@ -3,6 +3,7 @@ const dataScraper = require("./dataScraper.js");
 const cleaner = require("./cleaner.js");
 const enricher = require("./enricher.js");
 const json2xls = require("json2xls");
+const logger = require("./logger");
 
 const bar = async baseUrl => {
   try {
@@ -15,7 +16,8 @@ const bar = async baseUrl => {
     const xls = json2xls(enrichedData);
     return xls;
   } catch (error) {
-    console.log(error);
+    logger.log(error);
+    return null;
   }
 };
 
