@@ -1,5 +1,4 @@
 const puppeteer = require("puppeteer");
-const logger = require("./logger");
 let browser;
 
 const initPage = async () => {
@@ -8,7 +7,6 @@ const initPage = async () => {
   });
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 974 });
-  logger.log("init page");
   return page;
 };
 

@@ -80,6 +80,7 @@ const retryScrapeData = async link => {
 const scrape = async links => {
   let data = [];
   for (let i = 0; i < links.length; i++) {
+    logger.log("scrape " + (i + 1) + " of " + links.length);
     data.push(await retryScrapeData(links[i]));
   }
   logger.log("scraped the data of " + data.length + " links");
